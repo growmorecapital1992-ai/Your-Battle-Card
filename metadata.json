@@ -1,0 +1,6 @@
+{
+  "name": "ApexForge: Esports Profile Card & AI Spec Prompt Generator",
+  "description": "Collect player credentials, target game, roles, stats, and avatar to generate two master-level English AI prompts for ChatGPT and Gemini.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

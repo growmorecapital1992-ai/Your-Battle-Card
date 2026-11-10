@@ -1,0 +1,371 @@
+import { CombatRole, PlayerStat, UltimateEntity, GuildBadge, EsportsProfile } from '../types/esports';
+
+export const SUPPORTED_GAMES = [
+  'Free Fire',
+  'BGMI / PUBG Mobile',
+  'Valorant',
+  'Call of Duty: Mobile',
+  'Apex Legends Mobile',
+  'Counter-Strike 2',
+  'Custom Game',
+];
+
+// All pre-built + expanded combat roles
+export const INITIAL_COMBAT_ROLES: CombatRole[] = [
+  {
+    id: 'rusher',
+    title: 'Rusher (The Deadly Rusher / Gloo Wall Destroyer)',
+    category: 'Aggressive Assault',
+    tagline: 'Frontline Breacher',
+    description: 'First into the compound, shatters Gloo Walls and eliminates enemy squads at point-blank range.',
+    quote: 'When he rushes, even Gloo Walls beg for mercy.',
+    recommendedStats: ['Highest Kills', 'Headshot Rate', 'Average Damage'],
+  },
+  {
+    id: 'sniper',
+    title: 'Sniper (Lobby Sweeper / Headshot Specialist)',
+    category: 'Long-Range Execution',
+    tagline: 'Silent One-Tap Sovereign',
+    description: 'Pinpoint precision marksman commanding lines of sight. One bullet, one squad wiped.',
+    quote: 'If he catches you in his scope, your squad is already back in the lobby.',
+    recommendedStats: ['Headshot Rate', 'KDA Ratio', 'Highest Kills'],
+  },
+  {
+    id: 'strategic-player',
+    title: 'Strategic Player (Zone Controller)',
+    category: 'Tactical Command',
+    tagline: 'Mastermind In-Game Leader',
+    description: 'Reads enemy rotation patterns like an open book. Every call results in tactical high ground and free kills.',
+    quote: 'He doesn\'t react to the enemy; he writes their final circle script.',
+    recommendedStats: ['Win Rate', 'Top 10 Rate', 'Booyah Streak'],
+  },
+  {
+    id: 'zone-pusher',
+    title: 'Zone Pusher (Map Specialist)',
+    category: 'Edge Controller',
+    tagline: 'Storm Vanguard',
+    description: 'Dominates the collapsing boundary. Forces panic and traps rotating squads in the storm with nowhere to run.',
+    quote: 'He doesn\'t fight the zone; the zone moves on his command.',
+    recommendedStats: ['Top 10 Rate', 'Average Damage', 'Win Rate'],
+  },
+  {
+    id: 'squad-pillar',
+    title: 'Team Anchor / Squad Pillar (The Unshakeable Shield)',
+    category: 'Squad Keystone',
+    tagline: 'The Unbreakable Foundation',
+    description: 'The unshakeable shield who holds the squad together during chaotic firefights; orchestrates resets, covers revives, and anchors the final circle.',
+    quote: 'He is the wall standing between his team and defeat. If he\'s alive, the Booyah is 100% guaranteed.',
+    recommendedStats: ['Win Rate', 'Top 10 Rate', 'Average Damage'],
+  },
+  {
+    id: 'squad-rusher',
+    title: 'Squad Rusher (CQC Specialist)',
+    category: 'Shock Trooper',
+    tagline: 'Compound Demolisher',
+    description: 'Shatters enemy fortifications in tandem with team grenades, clearing buildings in seconds.',
+    quote: 'Once his boots hit your roof, your survival probability drops to zero.',
+    recommendedStats: ['Average Damage', 'Highest Kills', 'Headshot Rate'],
+  },
+  {
+    id: 'position-taker',
+    title: 'Position Taker (Flanker / Cover Provider)',
+    category: 'Map Dominance',
+    tagline: 'High Ground Monarch',
+    description: 'Secures vital choke points and towers before opponents even realize they\'re vulnerable, providing fatal crossfire.',
+    quote: 'The high ground belongs to him. Anyone looking up is looking directly into their demise.',
+    recommendedStats: ['Win Rate', 'KDA Ratio', 'Top 10 Rate'],
+  },
+  // Auto-suggested 5+ Unique Tactical Roles
+  {
+    id: 'entry-fragger',
+    title: 'Entry Fragger (First Knock Pioneer)',
+    category: 'Spearhead Assault',
+    tagline: 'Skull Breaker',
+    description: 'Sacrifices safety for instant first-knock tempo, cracking the enemy roster wide open in under 2 seconds.',
+    quote: 'First knock in 2 seconds. The round is decided before your enemy even reloads.',
+    recommendedStats: ['Highest Kills', 'Average Damage', 'Headshot Rate'],
+  },
+  {
+    id: 'clutch-god',
+    title: 'Clutch God (1v4 Apex Sovereign)',
+    category: 'Solo Decimator',
+    tagline: '1v4 Apex Sovereign',
+    description: 'At his deadliest when his squad is eliminated. Thrives under pure pressure to wipe entire full squads alone.',
+    quote: 'Surrounding him doesn\'t give you an advantage; it just traps you in the cage with him.',
+    recommendedStats: ['Booyah Streak', 'Highest Kills', 'KDA Ratio'],
+  },
+  {
+    id: 'recon-specialist',
+    title: 'Recon Specialist (Intel Predator)',
+    category: 'Information Warfare',
+    tagline: 'Intel Predator',
+    description: 'Locates enemy positions with UAVs, sound cues, and sniper scopes before combat initiates.',
+    quote: 'You can hide behind concrete or smoke, but your heartbeat has already betrayed you.',
+    recommendedStats: ['Top 10 Rate', 'Win Rate', 'Headshot Rate'],
+  },
+  {
+    id: 'bullet-bastion',
+    title: 'Bullet Bastion (Cover Provider)',
+    category: 'Fire Support',
+    tagline: 'Bullet Bastion',
+    description: 'Lays down suppressing fire and impenetrable Gloo Walls so rushers can close the gap safely.',
+    quote: 'Stand behind him and you are immortal. Step in front of him and you are wiped.',
+    recommendedStats: ['Average Damage', 'Top 10 Rate', 'Win Rate'],
+  },
+  {
+    id: 'high-ground-monarch',
+    title: 'High-Ground Monarch (Apex Vantage Controller)',
+    category: 'Vantage Supremacy',
+    tagline: 'Roof & Hilltop King',
+    description: 'Unassailable from below. Locks down the final circle by eliminating squads attempting to climb.',
+    quote: 'Every bullet from above is a death sentence. Don\'t look up.',
+    recommendedStats: ['Win Rate', 'KDA Ratio', 'Headshot Rate'],
+  },
+  {
+    id: 'void-infiltrator',
+    title: 'Void Infiltrator (Ghost Flanker)',
+    category: 'Stealth Infiltrator',
+    tagline: 'Ghost Assassin',
+    description: 'Slips behind enemy blind spots while they are pinned down, delivering fatal crossfire without making a sound.',
+    quote: 'You won\'t hear his footsteps; you will only hear your squadmate\'s death crate hit the ground.',
+    recommendedStats: ['KDA Ratio', 'Highest Kills', 'Headshot Rate'],
+  },
+];
+
+// Available Stat Pool
+export const ALL_AVAILABLE_STATS: Omit<PlayerStat, 'value'>[] = [
+  { id: 'headshot-rate', label: 'Headshot Rate', unit: '%', iconName: 'Crosshair', maxValue: 100, color: '#ef4444' },
+  { id: 'kda-ratio', label: 'KDA Ratio', unit: '', iconName: 'Swords', maxValue: 20, color: '#f59e0b' },
+  { id: 'win-rate', label: 'Win Rate', unit: '%', iconName: 'Trophy', maxValue: 100, color: '#10b981' },
+  { id: 'top-10-rate', label: 'Top 10 Rate', unit: '%', iconName: 'Shield', maxValue: 100, color: '#3b82f6' },
+  { id: 'avg-damage', label: 'Average Damage', unit: '', iconName: 'Flame', maxValue: 5000, color: '#ec4899' },
+  { id: 'highest-kills', label: 'Highest Kills', unit: '', iconName: 'Skull', maxValue: 50, color: '#dc2626' },
+  { id: 'booyah-streak', label: 'Booyah Streak', unit: 'W', iconName: 'Zap', maxValue: 30, color: '#eab308' },
+];
+
+// The 9 Selectable Ultimate Awakened Entities (Looming Background Shadow Power)
+export const ULTIMATE_ENTITIES: UltimateEntity[] = [
+  {
+    id: 'crimson-demon',
+    title: 'Crimson Shadow Demon',
+    subtitle: 'Demon Sovereign of the Blood Moon',
+    imagePath: '/public/assets/aistudio/Screenshot_2026-11-10_132936_2d50b6da.png',
+    eyeGlowColor: '#ff0033',
+    auraGradient: 'from-red-600/60 via-red-950/80 to-transparent',
+    defaultSlogan: 'IS NOW BEEN AWAKING',
+    hasChains: true,
+    hasBloodMoon: true,
+    description: 'The iconic awakened entity with piercing crimson eyes, flowing black cloak, blood moon, and shattered chains.',
+  },
+  {
+    id: 'asura-warlord',
+    title: 'Asura Warlord',
+    subtitle: 'Titan of Unquenchable Battle Fury',
+    imagePath: '/src/assets/images/ultimate_asura_warlord_1794298149266.jpg',
+    eyeGlowColor: '#ff2200',
+    auraGradient: 'from-orange-600/60 via-red-900/80 to-transparent',
+    defaultSlogan: 'TITAN ASCENDS · UNLEASH CHAOS',
+    hasChains: true,
+    hasBloodMoon: false,
+    description: 'Towering armored colossus wielding colossal battleaxes forged in molten fire.',
+  },
+  {
+    id: 'cyber-reaper',
+    title: 'Void Cyber Reaper',
+    subtitle: 'Cybernetic Harbinger of the Arena',
+    imagePath: '/src/assets/images/ultimate_cyber_reaper_1794298172117.jpg',
+    eyeGlowColor: '#d946ef',
+    auraGradient: 'from-purple-600/60 via-fuchsia-950/80 to-transparent',
+    defaultSlogan: 'THE ARENA REAPER STRIKES',
+    hasChains: true,
+    hasBloodMoon: false,
+    description: 'Futuristic hooded spectre shrouded in cyber lightning, shattered steel links, and laser scythe.',
+  },
+  {
+    id: 'dragon-berserker',
+    title: 'Draconic Berserker',
+    subtitle: 'Infernal Wyrm of Total Eclipse',
+    imagePath: '/src/assets/images/ultimate_dragon_berserker_1794298150225.jpg',
+    eyeGlowColor: '#ff3b00',
+    auraGradient: 'from-amber-600/60 via-red-950/80 to-transparent',
+    defaultSlogan: 'DRAGON HEART AWAKENED',
+    hasChains: true,
+    hasBloodMoon: true,
+    description: 'Ancient horned dragon titan spreading massive bat wings across the eclipsed solar ring.',
+  },
+  {
+    id: 'iron-golem',
+    title: 'Iron Golem Sovereign',
+    subtitle: 'Colossus of Shattered Bedrock',
+    imagePath: '/src/assets/images/ultimate_asura_warlord_1794298149266.jpg', // stylized variant
+    eyeGlowColor: '#eab308',
+    auraGradient: 'from-yellow-600/50 via-zinc-900/80 to-transparent',
+    defaultSlogan: 'UNBREAKABLE EARTH MONARCH',
+    hasChains: true,
+    hasBloodMoon: false,
+    description: 'Heavily plated titan that absorbs incoming artillery without yielding a single inch.',
+  },
+  {
+    id: 'thunder-raijin',
+    title: 'Thunder Raijin',
+    subtitle: 'Lord of Electric Annihilation',
+    imagePath: '/src/assets/images/ultimate_cyber_reaper_1794298172117.jpg', // stylized variant
+    eyeGlowColor: '#06b6d4',
+    auraGradient: 'from-cyan-500/60 via-blue-950/80 to-transparent',
+    defaultSlogan: 'LIGHTNING STRIKES THE WEAK',
+    hasChains: false,
+    hasBloodMoon: false,
+    description: 'Crackles with hundred-thousand-volt lightning arcs that paralyze all who dare cross his path.',
+  },
+  {
+    id: 'phantom-assassin',
+    title: 'Phantom Assassin',
+    subtitle: 'Shadow King of the Silent Knives',
+    imagePath: '/public/assets/aistudio/Screenshot_2026-11-10_132936_2d50b6da.png',
+    eyeGlowColor: '#8b5cf6',
+    auraGradient: 'from-violet-600/60 via-slate-950/80 to-transparent',
+    defaultSlogan: 'STEP INTO THE SILENCE',
+    hasChains: false,
+    hasBloodMoon: true,
+    description: 'Spectral entity moving through pitch-black mist, leaving only cold footprints.',
+  },
+  {
+    id: 'apex-sovereign',
+    title: 'Apex Sovereign',
+    subtitle: 'Golden Crowned Emperor of Battle',
+    imagePath: '/src/assets/images/ultimate_dragon_berserker_1794298150225.jpg',
+    eyeGlowColor: '#fbbf24',
+    auraGradient: 'from-amber-500/60 via-red-950/80 to-transparent',
+    defaultSlogan: 'BORN TO RULE THE TOURNAMENT',
+    hasChains: true,
+    hasBloodMoon: true,
+    description: 'Crowned with divine gold and wielding supreme authority over every lobby.',
+  },
+  {
+    id: 'abyssal-chaos',
+    title: 'Abyssal Chaos Entity',
+    subtitle: 'Eldritch Terror from the Void',
+    imagePath: '/public/assets/aistudio/Screenshot_2026-11-10_132936_2d50b6da.png',
+    eyeGlowColor: '#ef4444',
+    auraGradient: 'from-rose-600/60 via-black to-transparent',
+    defaultSlogan: 'CONSUMED BY THE VOID',
+    hasChains: true,
+    hasBloodMoon: true,
+    description: 'Dark tendrils of pure chaos that drag entire enemy squads into oblivion.',
+  },
+];
+
+// Guild Badges
+export const GUILD_BADGES: GuildBadge[] = [
+  { id: 'crown-gold', name: 'Imperial Gold Crown', icon: 'Crown', color: '#f59e0b' },
+  { id: 'skull-demon', name: 'Cyber Demon Skull', icon: 'Skull', color: '#ef4444' },
+  { id: 'swords-cross', name: 'Dual War Blades', icon: 'Swords', color: '#3b82f6' },
+  { id: 'hazard-shield', name: 'Biohazard Crest', icon: 'ShieldAlert', color: '#10b981' },
+  { id: 'wolf-alpha', name: 'Iron Wolf Pack', icon: 'Zap', color: '#a855f7' },
+];
+
+// Esports Alias Quick Presets
+export const ALIAS_PRESETS = [
+  { prefix: 'Mr.', suffix: '"boss"', symbol: '👑', label: 'Mr. [Name] "boss"' },
+  { prefix: 'Ultimate', suffix: '', symbol: '⚡', label: 'Ultimate [Name]' },
+  { prefix: '亗 KING', suffix: '亗', symbol: '亗', label: '亗 KING [Name] 亗' },
+  { prefix: '『DEVIL』', suffix: '☬', symbol: '☬', label: '『DEVIL』 [Name] ☬' },
+  { prefix: 'GOD', suffix: '', symbol: '꧁༺ ༻꧂', label: '꧁༺GOD•[Name]༻꧂' },
+  { prefix: 'Apex', suffix: 'ᴮᴼˢˢ', symbol: '☠️', label: 'Apex [Name] ᴮᴼˢˢ' },
+];
+
+// Available Weapons & Abilities for Top 3 Slots
+export const AVAILABLE_LOADOUT_ITEMS = [
+  'M1887 Shotgun (High-Burst CQC)',
+  'AWM Sniper (One-Tap Precision)',
+  'MP40 Predatory Cobra (Rapid Fire)',
+  'Woodpecker Marksman (Armor Penetration)',
+  'Alok "Drop the Beat" (HP & Speed Aura)',
+  'Chrono "Time Turner" (Forcefield Shield)',
+  'Tatsuya "Rebel Rush" (Rapid Blitz Dash)',
+  'Homer "Senses Shockwave" (Target Missile)',
+  'Gloo Wall Specialist (Instant Fortification)',
+  'Dragon Flame Katana (Melee Deflect)',
+];
+
+// Quick Character Traits
+export const AVAILABLE_QUICK_TRAITS = [
+  'Clutch King',
+  'Deadly Accuracy',
+  'Zone Controller',
+  'First Blood Hunter',
+  'Lobby Sweeper',
+  'Unshakable Anchor',
+  'Headshot Demon',
+  'Ghost Flanker',
+  '1v4 Specialist',
+  'Cold-Blooded Leader',
+];
+
+// Default Initial Profile
+export const DEFAULT_PROFILE: EsportsProfile = {
+  targetGame: 'Free Fire',
+  aspectRatio: '4:5 (Esports Card / IG)',
+
+  playerName: 'Ak',
+  playerUID: 'UID: 9842105471',
+  aliasPrefix: '',
+  aliasSuffix: '',
+  styledAliasOverride: '',
+
+  guildName: 'BOSS EMPIRE',
+  guildLevel: 'LEVEL 5 GUILD',
+  guildCreed: 'ONE TEAM · ONE FAMILY · ONE EMPIRE',
+  guildBadgeId: 'crown-gold',
+  guildLogoUrl: '',
+  awakeningStatus: 'IS NOW BEEN AWAKING',
+
+  roleId: 'rusher',
+  customRoleTitle: 'Rusher (The Deadly Rusher / Gloo Wall Destroyer)',
+  quote: 'When he rushes, even Gloo Walls beg for mercy.',
+  customBio: 'Tournament Finalist · Unbeatable CQC Specialist',
+
+  signatureWeapon: 'MP40 Predatory Cobra',
+  equippedLoadout: [
+    'MP40 Predatory Cobra',
+    'M1887 Shotgun',
+    'AWM Sniper',
+  ],
+  quickTraits: ['Clutch King', 'Deadly Accuracy', 'Zone Controller'],
+
+  avatarUrl: '/src/assets/images/default_player_portrait_1794298191819.jpg',
+  avatarScale: 1.05,
+  avatarOffsetX: 0,
+  avatarOffsetY: 0,
+
+  faceUpgrades: {
+    shades: false,
+    shadesStyle: 'tactical-aviators',
+    battleScars: false,
+    eyeFlare: false,
+    eyeColor: 'crimson',
+    animeShadow: true,
+    neonRimLight: true,
+    rimColor: 'crimson',
+    demonHorns: false,
+    combatMask: false,
+    contrast: 115,
+    rimGlowIntensity: 75,
+    grain: 20,
+  },
+
+  ultimateEntityId: 'crimson-demon',
+  showBrokenChains: true,
+  showBloodMoon: true,
+  showGothicCastle: true,
+  redAuraDensity: 85,
+
+  stats: [
+    { id: 'headshot-rate', label: 'Headshot Rate', value: '74.8%', unit: '%', iconName: 'Crosshair', maxValue: 100, color: '#ef4444' },
+    { id: 'kda-ratio', label: 'KDA Ratio', value: '8.42', unit: '', iconName: 'Swords', maxValue: 20, color: '#f59e0b' },
+    { id: 'booyah-streak', label: 'Booyah Streak', value: '14', unit: 'W', iconName: 'Zap', maxValue: 30, color: '#eab308' },
+  ],
+
+  themeColor: 'crimson',
+  soundEnabled: true,
+};
